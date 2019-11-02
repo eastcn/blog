@@ -12,7 +12,7 @@ from flask import Blueprint, request, make_response
 from DAO.basic.article import ArticleSql
 from Utils.getTitle import getTitle
 
-article = Blueprint('article', url_prefix='/article', import_name=__name__)
+article = Blueprint('article', url_prefix='/api/article', import_name=__name__)
 
 
 @article.route('/getNameByKind', methods=['get'])

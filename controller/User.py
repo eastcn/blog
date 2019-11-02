@@ -8,7 +8,7 @@ import json
 from flask import Blueprint
 from DAO.basic.user import UserMethod
 
-USER = Blueprint('USER', import_name=__name__, url_prefix='/user')
+USER = Blueprint('USER', import_name=__name__, url_prefix='/api/user')
 
 
 @USER.route('/getUserInfo', methods=['get'])
