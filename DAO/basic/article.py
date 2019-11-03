@@ -3,6 +3,7 @@
 @date:
 @function:
 """
+import json
 import traceback
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -13,7 +14,7 @@ from config import CONFIG
 class ArticleSql():
 
     def __init__(self):
-        self.engine = create_engine(CONFIG.SQLALCHEMY_DATABASE_URI)
+        self.engine = create_engine(CONFIG.SQLALCHEMY_DATABASE_URI, echo=True)
         self.DB_Session = sessionmaker(self.engine)
         self.article_table = Article.__table__
 
@@ -47,9 +48,29 @@ class ArticleSql():
             session = self.DB_Session()
             # data = session.query(Article.__table__).filter_by(id=article['id']).first()
             # sqlalchemy更新时，只需要用session查询出然后再修改。查询的对象为对应类的model类，上一句为错误示范
-            data = session.query(Article).filter_by(id=article['id']).update(
-                {"contend": article['contend'], "title": article['title']})
+            print(article)
+            data = session.query(Article).filter(Article.id==article['id']).update(
+                {"contend": article['contend'], "title": article['title'], "tag": article['tags'],
+                 "kind": article['kind']})
             session.commit()
+            session.close()
+            return True
+        except Exception:
+            traceback.print_exc()
+            return False
+
+    def updateOldPostById(self,article):
+        # todo 排查更新数据问题
+        try:
+            session = self.DB_Session()
+            print(article)
+            data = session.query(Article).filter(Article.id==article['id'])
+            data.contend = article['contend']
+            data.title = article['title']
+            data.tag = article['tag']
+            data.kind = article['kind']
+            session.commit()
+            session.close()
             return True
         except Exception:
             traceback.print_exc()
@@ -62,7 +83,7 @@ class ArticleSql():
         try:
             session = self.DB_Session()
             colums = self.article_table.columns.keys()
-            data = session.query(Article.__table__).filter_by(kind=kind).limit(limit).all()
+            data = session.query(Article).filter_by(kind=kind).order_by(Article.create_time.desc()).limit(limit).all()
             return data
         except Exception:
             traceback.print_exc()
@@ -80,7 +101,10 @@ class ArticleSql():
             if len(data) > 0:
                 res = {
                     'id': data[0].id,
-                    'contend': data[0].contend
+                    'contend': data[0].contend,
+                    'tags': data[0].tag,
+                    'kind': data[0].kind,
+                    'updateTime': data[0].update_time.strftime("%Y-%m-%d %H:%M")
                 }
                 return res
             else:
@@ -96,5 +120,3 @@ class ArticleSql():
         except Exception:
             traceback.print_exc()
             return False
-
-

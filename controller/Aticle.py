@@ -14,20 +14,22 @@ from Utils.getTitle import getTitle
 
 article = Blueprint('article', url_prefix='/api/article', import_name=__name__)
 
+db = ArticleSql()
+
 
 @article.route('/getNameByKind', methods=['get'])
 def get_article_id():
     kind = request.args.get('kind')
-    data = ArticleSql().select_by_kind(kind, 10)
+    data = db.select_by_kind(kind, 10)
     if data is not False:
         res_list = []
         if len(data) > 0:
             for item in data:
                 article_dict = {
-                    'name': item[1],
-                    'id': item[0],
-                    'time': item[6].strftime("%Y-%m-%d"),
-                    'tags': json.loads(item[3])
+                    'name': item.title,
+                    'id': item.id,
+                    'time': item.create_time.strftime("%Y-%m-%d"),
+                    'tags': json.loads(item.tag)
                 }
                 res_list.append(article_dict)
         return json.dumps(res_list)
@@ -44,7 +46,7 @@ def get_article_text():
     }
     try:
         article_id = request.args.get("id")
-        data = ArticleSql().select_by_id(article_id)
+        data = db.select_by_id(article_id)
         if data:
             res['code'] = 200
             res['post'] = data.contend
@@ -84,14 +86,41 @@ def saveArticle():
     try:
         body = json.loads(request.data.decode('utf-8'))
         title = getTitle(body['data'])
-        result['code'] = 200
-        article = {
-            'id': body['id'],
-            'title': title,
-            'contend': body['data']
-        }
-        article_id = ArticleSql().updateById(article)
-        result['id'] = article_id
+        checkTitle =db.select_id_by_title(title)
+        if checkTitle is True:
+            result['code'] = 200
+            article = {
+                'id': body['id'],
+                'title': title,
+                'contend': body['data'],
+                'tags': body['tags'],
+                'kind': body['kind']
+            }
+            article_id = db.updateById(article)
+            result['id'] = article_id
+        if checkTitle is not True and checkTitle is not False:
+            if checkTitle['id'] == body['id']:
+                result['code'] = 200
+                article = {
+                    'id': body['id'],
+                    'title': title,
+                    'contend': body['data'],
+                    'tags': body['tags'],
+                    'kind': body['kind']
+                }
+                article_id = db.updateOldPostById(article)
+                result['id'] = article_id
+            else:
+                result['code'] = 202  # 代表文章恢复
+                result['id'] = checkTitle['id']
+                result['contend'] = checkTitle['contend']
+                result['updateTime'] = checkTitle['updateTime']
+                if checkTitle['tags'] is not None:
+                    result['tags'] = json.loads(checkTitle['tags'])
+                if checkTitle['kind'] is not None:
+                    result['kind'] = checkTitle['kind']
+                else:
+                    result['kind'] = None
     except Exception:
         traceback.print_exc()
     return json.dumps(result)
@@ -110,9 +139,9 @@ def initArticle():
             'title': title,
             'contend': body['data']
         }
-        res = ArticleSql().select_id_by_title(title)
+        res = db.select_id_by_title(title)
         if res is True:
-            article_id = ArticleSql().insert(article)
+            article_id = db.insert(article)
             result['code'] = 200
             result['id'] = article_id
         elif res is not False and res is not True:
