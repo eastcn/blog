@@ -21,3 +21,11 @@ def getUserInfo():
         user_info['words'] = data[0][2]
         user_info['headWord'] = data[0][-1]
     return json.dumps(user_info, ensure_ascii=False)
+
+@USER.route('/getUserWords', methods=['get'])
+def getUserWords():
+    data = UserMethod().selectUserInfo()
+    user_info = {}
+    if data is not False:
+        user_info['words'] = data[0][2]
+    return json.dumps(user_info, ensure_ascii=False)
