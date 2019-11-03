@@ -9,5 +9,5 @@ def hello():
     return "hello"
 
 if __name__ == '__main__':
-    CORS(app,supports_credentials=True)
+    CORS(app, resources={r"/*": {"origins": "*"}})
     app.run(port=8089)
