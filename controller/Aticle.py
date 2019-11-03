@@ -69,7 +69,7 @@ def uploadImage():
         file_name = f.filename.split('.')
         file_url = f'/static/{f.filename[0]}_{str(int(time.time()))}.{file_name[1]}'
         f.save(f'.{file_url}')
-        result['url'] = './api' + file_url
+        result['url'] = 'http://localhost:8089' + file_url
         result['success'] = True
     except Exception:
         traceback.print_exc()
