@@ -14,7 +14,7 @@ from config import CONFIG
 class ArticleSql():
 
     def __init__(self):
-        self.engine = create_engine(CONFIG.SQLALCHEMY_DATABASE_URI, echo=True)
+        self.engine = create_engine(CONFIG.SQLALCHEMY_DATABASE_URI)
         self.DB_Session = sessionmaker(self.engine)
         self.article_table = Article.__table__
 
@@ -49,8 +49,9 @@ class ArticleSql():
             # data = session.query(Article.__table__).filter_by(id=article['id']).first()
             # sqlalchemy更新时，只需要用session查询出然后再修改。查询的对象为对应类的model类，上一句为错误示范
             print(article)
-            data = session.query(Article).filter(Article.id==article['id']).update(
-                {"contend": article['contend'], "title": article['title'], "tag": article['tags'],
+            data = session.query(Article).filter(Article.id == article['id']).update(
+                {"contend": article['contend'], "title": article['title'],
+                 "tag": json.dumps(article['tags'], ensure_ascii=False),
                  "kind": article['kind']})
             session.commit()
             session.close()
@@ -60,14 +61,15 @@ class ArticleSql():
             return False
 
     def updateOldPostById(self,article):
-        # todo 排查更新数据问题
+        # 排查更新数据问题 解决，数据类型问题，tags存入时应为string不是list。
         try:
             session = self.DB_Session()
             print(article)
-            data = session.query(Article).filter(Article.id==article['id'])
+            data = session.query(Article).filter(Article.id==article['id']).first()
+            print(f"post id:{data.id}" )
             data.contend = article['contend']
             data.title = article['title']
-            data.tag = article['tag']
+            data.tag = json.dumps(article['tags'])
             data.kind = article['kind']
             session.commit()
             session.close()

@@ -108,7 +108,7 @@ def saveArticle():
                     'tags': body['tags'],
                     'kind': body['kind']
                 }
-                article_id = db.updateOldPostById(article)
+                article_id = db.updateById(article)
                 result['id'] = article_id
             else:
                 result['code'] = 202  # 代表文章恢复
