@@ -64,19 +64,17 @@ def del_article():
 
 @article.route('/uploadImage', methods=['post'])
 def uploadImage():
-
-    if (request.remote_addr == '127.0.0.1'):
-        myaddr = '127.0.0.1'
-    else:
-        myname = socket.getfqdn(socket.gethostname())
-        myaddr = socket.gethostbyname(myname)
+    """
+    上传图片
+    :return:
+    """
     result = {}
     try:
         f = request.files['image']
         file_name = f.filename.split('.')
         file_url = f'/static/{f.filename[0]}_{str(int(time.time()))}.{file_name[1]}'
         f.save(f'.{file_url}')
-        result['url'] =  f'http://{myaddr}:8089{file_url}'
+        result['url'] =  f'http://47.111.163.9:8089{file_url}'
         result['success'] = True
     except Exception:
         traceback.print_exc()
