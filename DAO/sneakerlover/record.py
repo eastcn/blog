@@ -10,6 +10,7 @@ from sqlalchemy.orm import sessionmaker
 from Model.sneakerlover.record import Record
 from config import CONFIG
 
+
 class RecordDao:
     def __init__(self):
         self.engine = create_engine(CONFIG.SQLALCHEMY_DATABASE_URI_SNEAKER)
@@ -24,9 +25,9 @@ class RecordDao:
         conn.close()
         return data
 
-    def select_detail_by_name(self,name):
+    def select_detail_by_name(self, name):
         data = self.session().query(Record).filter(Record.userName == name).all()
         data_list = []
         for item in data:
-            data_list.append((item.userName,item.method,item.shoes,item.create_time.strftime("%Y-%m-%d")))
+            data_list.append((item.userName, item.method, item.shoes, item.create_time.strftime("%Y-%m-%d")))
         return data_list

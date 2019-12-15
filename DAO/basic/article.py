@@ -11,7 +11,7 @@ from Model.basic.article import Article
 from config import CONFIG
 
 
-class ArticleSql():
+class ArticleSql:
 
     def __init__(self):
         self.engine = create_engine(CONFIG.SQLALCHEMY_DATABASE_URI)

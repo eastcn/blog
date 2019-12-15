@@ -10,5 +10,6 @@ CORS(app, origins="*", supports_credentials=True)
 def hello():
     return "hello"
 
+
 if __name__ == '__main__':
     app.run(port=8089)

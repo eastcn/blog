@@ -10,4 +10,4 @@ def getTitle(body):
         title = body.split('\n')[0].split('#')[1]
     else:
         title = body.split('#')[1]
-    return title.replace(' ','')
+    return title.replace(' ', '')
