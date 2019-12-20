@@ -129,8 +129,9 @@ class DoubanLogin:
         }
         res = requests.post(url=login_url, data=data, headers=CONFIG.HEADER, verify=False)
         cookie = requests.utils.dict_from_cookiejar(res.cookies)
+        print(f"本次登录获取到的cookie：{cookie}")
         return cookie
 
 
 if __name__ == '__main__':
-    print(MovieSpider().get_movie_detail(6981153))
+    print(DoubanLogin().login())

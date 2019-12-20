@@ -28,7 +28,7 @@ def spider_job():
             for item in data:
                 db_movie_id.append(item.movie_id)
             for movie in all_movie[tag]:
-                if movie['id'] not in db_movie_id:
+                if int(movie['id']) not in db_movie_id:
                     the_recommend_movie[tag] = movie
                     print(f"本次推荐电影的index为{all_movie[tag].index(movie)}")
                     break
