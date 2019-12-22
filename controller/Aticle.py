@@ -8,7 +8,7 @@ import datetime
 import socket
 import time
 import traceback
-
+from Utils.log import log
 from flask import Blueprint, request, make_response
 from DAO.basic.article import ArticleSql
 from Utils.getTitle import getTitle
@@ -33,6 +33,7 @@ def get_article_id():
                     'tags': json.loads(item.tag)
                 }
                 res_list.append(article_dict)
+        log.info("getNameByKind返回")
         return json.dumps(res_list)
     else:
         return 'error'
@@ -150,7 +151,6 @@ def initArticle():
             result['code'] = 200
             result['id'] = article_id
         elif res is not False and res is not True:
-            print(res)
             if title == "不如来写篇文章吧":
                 result['code'] = 200
             else:

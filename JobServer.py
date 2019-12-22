@@ -4,6 +4,7 @@ author: east
 function: 定时任务调度
 """
 from config import CONFIG
+from Utils.log import log
 from Movie.Service.movieJob import spider_job
 from apscheduler.schedulers.blocking import BlockingScheduler
 
@@ -17,6 +18,7 @@ class JobServer:
 
     def job_start(self):
         self.add_movie_job()
+        log.info("movie 爬虫启动")
         self.schedule.start()
 
 
