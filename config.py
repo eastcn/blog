@@ -8,8 +8,8 @@
 class CONFIG:
     """数据库相关"""
     ENV = "LOCAL"
-    SQLALCHEMY_DATABASE_URI = "mysql+pymysql://root:EASTlove7!@47.111.163.9:3306/blog"
-    SQLALCHEMY_DATABASE_URI_SNEAKER = "mysql+pymysql://root:EASTlove7!@47.111.163.9:3306/sneakerlover"
+    SQLALCHEMY_DATABASE_URI = "mysql+pymysql://username:password@127.0.0.1:3306/blog"
+    SQLALCHEMY_DATABASE_URI_SNEAKER = "mysql+pymysql://username:password@127.0.0.1:3306/sneakerlover"
 
     """豆瓣爬虫相关"""
     HEADER = {
