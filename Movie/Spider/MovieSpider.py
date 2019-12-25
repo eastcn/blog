@@ -20,7 +20,7 @@ class MovieSpider:
     def __init__(self):
         self.url = "https://movie.douban.com/j/search_subjects"
         self.category = CONFIG.TAG
-        self.cookie = DoubanLogin().login()
+        # self.cookie = DoubanLogin().login()
         self.header = CONFIG.HEADER
 
     def get_movies(self):
@@ -49,7 +49,7 @@ class MovieSpider:
             print(json.dumps(res_rank, ensure_ascii=False))
             res_recommend = json.loads(
                 requests.get(url=url_recommend, cookies=self.cookie, headers=self.header, verify=False).text)
-            hot_movies = self.compare_two_list(res_rank['subjects'], res_recommend['subjects'])
+            hot_movies = compare_two_list(res_rank['subjects'], res_recommend['subjects'])
             return hot_movies
         except Exception:
             print("获取热门的电影-error")
@@ -86,30 +86,43 @@ class MovieSpider:
             traceback.print_exc()
             return "null"
 
-    @staticmethod
-    def get_source_from_btdx8():
+    def get_cover(self, cover_url, movie):
         """
-        获取movie source 从bt大熊网站
+        获取电影的海报，并保存
         """
-        pass
+        print("获取电影cover")
+        file_name = f"static/cover/{movie}.webp"
+        res = requests.get(cover_url, headers=self.header, verify=False)
+        with open(file_name, "wb") as f:
+            f.write(res.content)
+            f.close()
+        print(f"获取成功，地址为：{file_name}")
+        return file_name
 
-    @staticmethod
-    def compare_two_list(l_1, l_2):
-        """
-        用于比较两个json中是否存在相同的电影名
-        """
-        final_id_list = []
-        final_movie_list = []
-        id_list_1 = [movie['id'] for movie in l_1]
-        id_list_2 = [movie['id'] for movie in l_2]
-        for id_1 in id_list_1:
-            for id_2 in id_list_2:
-                if id_1 == id_2:
-                    final_id_list.append(id_1)
-        for movie in l_1:
-            if movie['id'] in final_id_list:
-                final_movie_list.append(movie)
-        return final_movie_list
+
+def get_source_from_btdx8():
+    """
+    获取movie source 从bt大熊网站
+    """
+    pass
+
+
+def compare_two_list(l_1, l_2):
+    """
+    用于比较两个json中是否存在相同的电影名
+    """
+    final_id_list = []
+    final_movie_list = []
+    id_list_1 = [movie['id'] for movie in l_1]
+    id_list_2 = [movie['id'] for movie in l_2]
+    for id_1 in id_list_1:
+        for id_2 in id_list_2:
+            if id_1 == id_2:
+                final_id_list.append(id_1)
+    for movie in l_1:
+        if movie['id'] in final_id_list:
+            final_movie_list.append(movie)
+    return final_movie_list
 
 
 class DoubanLogin:
@@ -134,4 +147,4 @@ class DoubanLogin:
 
 
 if __name__ == '__main__':
-    print(DoubanLogin().login())
+    pass

@@ -42,11 +42,12 @@ def spider_job():
         movie_detail = movie_spider.get_movie_detail(the_recommend_movie[index]['id'])['subject']
         log.info(f"{index}: 本次推荐 {json.dumps(movie_dict, ensure_ascii=False)}")
         if movie_detail != "null":
+            cover = movie_spider.get_cover(the_recommend_movie[index]['cover'], the_recommend_movie[index]['id'])
             movie_dict['id'] = the_recommend_movie[index]['id']
             movie_dict['tag'] = index
             movie_dict['name'] = movie_detail['title']
             movie_dict['url'] = movie_detail['url']
-            movie_dict['cover'] = the_recommend_movie[index]['cover']
+            movie_dict['cover'] = cover
             movie_dict['rate'] = movie_detail['rate']
             movie_dict['playable'] = movie_detail['playable']
             movie_dict['new'] = the_recommend_movie[index]['is_new']
