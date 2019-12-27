@@ -1,0 +1,42 @@
+[2019-12-22 14:22:30 +0800] [10915] [INFO] Starting gunicorn 19.9.0
+[2019-12-22 14:22:30 +0800] [10915] [INFO] Listening at: http://0.0.0.0:8089 (10915)
+[2019-12-22 14:22:30 +0800] [10915] [INFO] Using worker: sync
+[2019-12-22 14:22:30 +0800] [10918] [INFO] Booting worker with pid: 10918
+[2019-12-22 14:22:30 +0800] [10918] [ERROR] Exception in worker process
+Traceback (most recent call last):
+  File "/usr/local/python_project/EastServer/lib/python3.7/site-packages/gunicorn/arbiter.py", line 583, in spawn_worker
+    worker.init_process()
+  File "/usr/local/python_project/EastServer/lib/python3.7/site-packages/gunicorn/workers/base.py", line 129, in init_process
+    self.load_wsgi()
+  File "/usr/local/python_project/EastServer/lib/python3.7/site-packages/gunicorn/workers/base.py", line 138, in load_wsgi
+    self.wsgi = self.app.wsgi()
+  File "/usr/local/python_project/EastServer/lib/python3.7/site-packages/gunicorn/app/base.py", line 67, in wsgi
+    self.callable = self.load()
+  File "/usr/local/python_project/EastServer/lib/python3.7/site-packages/gunicorn/app/wsgiapp.py", line 52, in load
+    return self.load_wsgiapp()
+  File "/usr/local/python_project/EastServer/lib/python3.7/site-packages/gunicorn/app/wsgiapp.py", line 41, in load_wsgiapp
+    return util.import_app(self.app_uri)
+  File "/usr/local/python_project/EastServer/lib/python3.7/site-packages/gunicorn/util.py", line 350, in import_app
+    __import__(module)
+  File "/usr/local/python_project/blog/app.py", line 3, in <module>
+    from factory import create_app
+  File "/usr/local/python_project/blog/factory.py", line 7, in <module>
+    from controller.Aticle import article
+  File "/usr/local/python_project/blog/controller/Aticle.py", line 11, in <module>
+    from Utils.log import log
+  File "/usr/local/python_project/blog/Utils/log.py", line 8, in <module>
+    log = Logger().log()
+  File "/usr/local/python_project/blog/Log/logger.py", line 18, in __init__
+    encoding="utf-8")
+  File "/usr/local/python3/lib/python3.7/logging/handlers.py", line 199, in __init__
+    BaseRotatingHandler.__init__(self, filename, 'a', encoding, delay)
+  File "/usr/local/python3/lib/python3.7/logging/handlers.py", line 54, in __init__
+    logging.FileHandler.__init__(self, filename, mode, encoding, delay)
+  File "/usr/local/python3/lib/python3.7/logging/__init__.py", line 1041, in __init__
+    StreamHandler.__init__(self, self._open())
+  File "/usr/local/python3/lib/python3.7/logging/__init__.py", line 1070, in _open
+    return open(self.baseFilename, self.mode, encoding=self.encoding)
+FileNotFoundError: [Errno 2] No such file or directory: '/usr/local/python_project/blog/Log/log/blog_'
+[2019-12-22 14:22:30 +0800] [10918] [INFO] Worker exiting (pid: 10918)
+[2019-12-22 14:22:30 +0800] [10915] [INFO] Shutting down: Master
+[2019-12-22 14:22:30 +0800] [10915] [INFO] Reason: Worker failed to boot.
