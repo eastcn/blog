@@ -91,7 +91,7 @@ class MovieSpider:
         获取电影的海报，并保存
         """
         print("获取电影cover")
-        file_name = f"static/cover/{movie}.webp"
+        file_name = f"static/img/{movie}.webp"
         res = requests.get(cover_url, headers=self.header, verify=False)
         with open(file_name, "wb") as f:
             f.write(res.content)
