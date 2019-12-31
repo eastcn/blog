@@ -20,7 +20,7 @@ class MovieSpider:
     def __init__(self):
         self.url = "https://movie.douban.com/j/search_subjects"
         self.category = CONFIG.TAG
-        # self.cookie = DoubanLogin().login()
+        self.cookie = DoubanLogin().login()
         self.header = CONFIG.HEADER
 
     def get_movies(self):
