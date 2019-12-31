@@ -11,9 +11,12 @@ function: 爬取www.douban.com数据
 在对应的tag下，取近期热门的数据，筛选出评分高于7的电影。
 """
 import json
+import urllib3
 import traceback
 import requests
 from config import CONFIG
+
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
 class MovieSpider:
