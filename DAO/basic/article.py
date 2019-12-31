@@ -24,9 +24,9 @@ class ArticleSql:
         传入要插入的对象列表
         :param object_list: 要insert的数据库表对象列表
         """
+        session = self.DB_Session()
         try:
             article_ = Article(contend=article['contend'], title=article['title'])
-            session = self.DB_Session()
             session.add(article_)
             session.flush()
             article_id = article_.id
@@ -37,6 +37,8 @@ class ArticleSql:
             print("传入数据库失败")
             traceback.print_exc()
             return "failed"
+        finally:
+            session.close()
 
     def updateById(self, article):
         """
@@ -44,8 +46,8 @@ class ArticleSql:
         :param article:
         :return:
         """
+        session = self.DB_Session()
         try:
-            session = self.DB_Session()
             # data = session.query(Article.__table__).filter_by(id=article['id']).first()
             # sqlalchemy更新时，只需要用session查询出然后再修改。查询的对象为对应类的model类，上一句为错误示范
             print(article)
@@ -59,11 +61,13 @@ class ArticleSql:
         except Exception:
             traceback.print_exc()
             return False
+        finally:
+            session.close()
 
     def updateOldPostById(self,article):
         # 排查更新数据问题 解决，数据类型问题，tags存入时应为string不是list。
+        session = self.DB_Session()
         try:
-            session = self.DB_Session()
             print(article)
             data = session.query(Article).filter(Article.id==article['id']).first()
             print(f"post id:{data.id}" )
@@ -77,19 +81,23 @@ class ArticleSql:
         except Exception:
             traceback.print_exc()
             return False
+        finally:
+            session.close()
 
     def delete(self, object_tuple):
         pass
 
     def select_by_kind(self, kind, limit):
+        session = self.DB_Session()
         try:
-            session = self.DB_Session()
             colums = self.article_table.columns.keys()
             data = session.query(Article).filter_by(kind=kind).order_by(Article.create_time.desc()).limit(limit).all()
             return data
         except Exception:
             traceback.print_exc()
             return False
+        finally:
+            session.close()
 
     def select_id_by_title(self, title):
         """
@@ -97,9 +105,10 @@ class ArticleSql:
         :param title:
         :return:
         """
+        session = self.DB_Session()
         try:
             article_id = ''
-            data = self.DB_Session().query(Article).filter_by(title=title).all()
+            data = session.query(Article).filter_by(title=title).all()
             if len(data) > 0:
                 res = {
                     'id': data[0].id,
@@ -114,11 +123,16 @@ class ArticleSql:
         except Exception:
             traceback.print_exc()
             return False
+        finally:
+            session.close()
 
     def select_by_id(self, article_id):
+        session = self.DB_Session()
         try:
-            data = self.DB_Session().query(Article).filter_by(id=article_id).first()
+            data = session.query(Article).filter_by(id=article_id).first()
             return data
         except Exception:
             traceback.print_exc()
             return False
+        finally:
+            session.close()

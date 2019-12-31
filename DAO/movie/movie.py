@@ -21,14 +21,16 @@ class MovieInfoDao:
         """
         从数据库中检索
         """
+        session = self.session()
         try:
-            session = self.session()
             data = session.query(MovieInfo).order_by(MovieInfo.create_time.desc()).limit(1).all()
             return data
         except Exception:
             print("检索数据库出错error")
             traceback.print_exc()
             return "null"
+        finally:
+            session.close()
 
     def select_all_recommend_movie(self):
         """
@@ -42,6 +44,8 @@ class MovieInfoDao:
             print("检索数据库出错error")
             traceback.print_exc()
             return "null"
+        finally:
+            session.close()
 
     def select_recommend_movie_limit(self, offset, limit):
         """

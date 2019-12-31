@@ -97,6 +97,7 @@ class MovieSpider:
             f.write(res.content)
             f.close()
         print(f"获取成功，地址为：{file_name}")
+        file_name = "http://eastfly.top:8089/" + file_name
         return file_name
 
 
