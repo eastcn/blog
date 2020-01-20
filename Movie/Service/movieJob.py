@@ -10,7 +10,7 @@ from Utils.log import log
 from DAO.movie.movie import MovieInfoDao
 from Movie.Spider.MovieSpider import MovieSpider
 
-db = MovieInfoDao()
+# db = MovieInfoDao()
 
 
 def spider_job():
@@ -23,7 +23,7 @@ def spider_job():
     all_movie = movie_spider.get_movies()
     log.info("——————————————根据tag获取movie数据并且筛选出一部推荐电影————————————")
     for tag in tags:
-        data = db.select_movie_id_by_tag(tag)
+        data = MovieInfoDao().select_movie_id_by_tag(tag)
         db_movie_id = []
         if len(data) > 0:
             for item in data:
