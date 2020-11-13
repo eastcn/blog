@@ -4,12 +4,14 @@
 @function:
 """
 from flask import Flask
+
+from Utils.log import log
+from config import CONFIG
 from controller.Aticle import article
+from controller.Movie import movie
+from controller.Tools import tools
 from controller.User import USER
 from controller.sneakerlover import sneaker
-from controller.Movie import movie
-from config import CONFIG
-from Utils.log import log
 
 
 def create_app():
@@ -20,5 +22,6 @@ def create_app():
     app.register_blueprint(USER)
     app.register_blueprint(sneaker)
     app.register_blueprint(movie)
+    app.register_blueprint(tools)
     log.info("注册成功...")
     return app

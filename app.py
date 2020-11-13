@@ -1,5 +1,5 @@
-from flask import Flask
 from flask_cors import CORS
+
 from factory import create_app
 
 app = create_app()

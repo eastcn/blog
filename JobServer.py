@@ -3,10 +3,11 @@ date: 2019.12.15
 author: east
 function: 定时任务调度
 """
-from config import CONFIG
-from Utils.log import log
-from Movie.Service.movieJob import spider_job
 from apscheduler.schedulers.blocking import BlockingScheduler
+
+from Movie.Service.movieJob import spider_job
+from Utils.log import log
+from config import CONFIG
 
 
 class JobServer:
